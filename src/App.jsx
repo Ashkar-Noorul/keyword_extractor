@@ -1,9 +1,10 @@
+import { useState } from "react";
 import { Container, Box } from "@chakra-ui/react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import TextInput from "./components/TextInput";
 import KeywordsModal from "./components/KeywordsModal";
-import { useState } from "react";
+
 const App = () => {
   const [keywords, setKeywords] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -39,8 +40,14 @@ const App = () => {
         options
       );
       const json = await response.json();
-      console.log(json.choices[0].text.trim());
-      setKeywords(json.choices[0].text.trim());
+
+      if (json && json.choices && json.choices.length > 0) {
+        console.log(json.choices[0].text.trim());
+        setKeywords(json.choices[0].text.trim());
+      } else {
+        console.error("No keywords extracted.");
+      }
+
       setLoading(false);
     } catch (error) {
       console.error(error);
